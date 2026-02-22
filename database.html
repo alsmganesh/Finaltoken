@@ -3,102 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Database</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            padding: 20px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #4CAF50;
-            color: white;
-        }
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-        .form-container {
-            margin-bottom: 20px;
-        }
-        .form-container input {
-            padding: 10px;
-            margin-right: 10px;
-        }
-    </style>
+    <title>User Database Interface</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>User Database Interface</h1>
-    <div class="form-container">
-        <input type="text" id="userName" placeholder="Name">
-        <input type="text" id="userEmail" placeholder="Email">
-        <button onclick="addUser()">Add User</button>
-        <input type="text" id="searchBar" placeholder="Search Users" onkeyup="searchUsers()">
-    </div>
-    <table id="userTable">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
-    <script>
-        let users = [];
-        function addUser() {
-            const name = document.getElementById('userName').value;
-            const email = document.getElementById('userEmail').value;
-            if(name && email) {
-                users.push({name, email});
-                document.getElementById('userName').value = '';
-                document.getElementById('userEmail').value = '';
-                displayUsers();
-            } else {
-                alert('Please enter both name and email.');
-            }
-        }
-        function displayUsers() {
-            const tableBody = document.getElementById('userTable').getElementsByTagName('tbody')[0];
-            tableBody.innerHTML = '';
-            users.forEach((user, index) => {
-                const row = tableBody.insertRow();
-                row.insertCell(0).innerText = user.name;
-                row.insertCell(1).innerText = user.email;
-                const actionsCell = row.insertCell(2);
-                actionsCell.innerHTML = `<button onclick="editUser(${index})">Edit</button> <button onclick="deleteUser(${index})">Delete</button>`;
-            });
-        }
-        function editUser(index) {
-            const name = prompt('Enter new name:', users[index].name);
-            const email = prompt('Enter new email:', users[index].email);
-            if (name && email) {
-                users[index] = {name, email};
-                displayUsers();
-            }
-        }
-        function deleteUser(index) {
-            users.splice(index, 1);
-            displayUsers();
-        }
-        function searchUsers() {
-            const filter = document.getElementById('searchBar').value.toLowerCase();
-            const tableBody = document.getElementById('userTable').getElementsByTagName('tbody')[0];
-            for (let i = 0, row; row = tableBody.rows[i]; i++) {
-                let nameCell = row.cells[0];
-                row.style.display = nameCell.innerHTML.toLowerCase().indexOf(filter) > -1 ? '' : 'none';
-            }
-        }
-    </script>
+    <header>
+        <h1>User Database Interface</h1>
+    </header>
+    <main>
+        <h2>Manage Users</h2>
+        <form action="/submit" method="POST">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+            <br>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            <br>
+            <button type="submit">Submit</button>
+        </form>
+        <h3>Existing Users</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="user-list">
+                <!-- User entries will be populated here -->
+            </tbody>
+        </table>
+    </main>
+    <script src="script.js"></script>
 </body>
 </html>
